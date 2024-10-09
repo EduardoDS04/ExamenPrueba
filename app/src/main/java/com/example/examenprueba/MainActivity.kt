@@ -1,4 +1,5 @@
 package com.example.examenprueba
+
 import kotlin.math.sqrt
 import kotlin.math.abs
 
@@ -6,21 +7,17 @@ import kotlin.math.abs
 fun f1(a: Double, b: Double, c: Double): Array<Double> {
     val TAG = "ECUACION_SEGUNDO_GRADO"
 
-    // Caso especial: Si 'a' es 0, tenemos una ecuacion de primer grado
     if (a == 0.0) {
-        // Si 'b' es diferente de 0, resolvemos bx + c = 0
         return if (b != 0.0) {
             val x1 = -c / b
             println("[$TAG] Ecuacion de primer grado con una solucion: x1 = $x1")
             arrayOf(2.0, x1, 0.0)
         } else {
-            // Si 'b' es tambien 0, entonces no es una ecuacion valida
             println("[$TAG] No hay solucion (ni ecuacion valida)")
             arrayOf(0.0, 0.0, 0.0)
         }
     }
 
-    // Si 'a' no es cero, procedemos con la solucion de segundo grado
     val valorDiscriminante = b * b - 4 * a * c
 
     return when {
@@ -45,14 +42,24 @@ fun f1(a: Double, b: Double, c: Double): Array<Double> {
 // Funcion para obtener el resultado segun el array devuelto por f1
 fun operacion(resultado: Array<Double>): Double {
     return when (resultado[0].toInt()) {
-        0 -> 0.0 // No tiene solucion
-        1 -> abs(resultado[1]) + abs(resultado[2]) // Dos soluciones: valor absoluto de x1 + x2
-        2 -> resultado[1] // Una sola solucion
+        0 -> 0.0
+        1 -> abs(resultado[1]) + abs(resultado[2])
+        2 -> resultado[1]
         else -> 0.0
     }
 }
 
-// Funcion principal para probar los 4 casos
+// Lambda para el ejercicio 2: Multiplicacion de tres valores
+val multiplicacionLambda: (Double, Double, Double) -> Double = { x, y, z ->
+    if (x == 0.0 && y == 0.0 && z == 0.0) 1.0 else x * y * z
+}
+
+// Funcion para el ejercicio 3: Calcular sumatorio de un array usando una lambda
+fun f2(array: Array<Double>, x1: Double, x2: Double, x3: Double, lambda: (Double, Double, Double) -> Double): Double {
+    return array.sumOf { it * lambda(x1, x2, x3) }
+}
+
+// Funcion principal para probar los 4 casos y ejercicios adicionales
 fun main() {
     val TAG = "ECUACION_SEGUNDO_GRADO"
 
@@ -82,4 +89,20 @@ fun main() {
     val resultado4 = f1(1.0, 2.0, 3.0)
     println("[$TAG] Array devuelto: ${resultado4.contentToString()}")
     println("[$TAG] Resultado de la operacion: ${operacion(resultado4)}")
+    println()
+
+    // Ejercicio 2: Multiplicacion de tres valores usando la lambda
+    println("=== Ejercicio 2: Multiplicacion ===")
+    val multiplicacionResultado1 = multiplicacionLambda(1.0, 2.0, 3.0)
+    println("[$TAG] Resultado de la multiplicacion 1: $multiplicacionResultado1")
+
+    val multiplicacionResultado2 = multiplicacionLambda(0.0, 0.0, 0.0)
+    println("[$TAG] Resultado de la multiplicacion 2 (deberia ser 1): $multiplicacionResultado2")
+    println()
+
+    // Ejercicio 3: Sumatorio usando la funcion f2 y la lambda
+    println("=== Ejercicio 3: Sumatorio ===")
+    val array = arrayOf(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0)
+    val sumatorioResultado = f2(array, 1.0, 2.0, 3.0) { x1, x2, x3 -> x1 - x2 * x3 }
+    println("[$TAG] Resultado del sumatorio: $sumatorioResultado")
 }
